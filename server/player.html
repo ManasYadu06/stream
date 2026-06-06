@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RPi Live Stream</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body { background: #000; display: flex; justify-content: center;
+           align-items: center; height: 100vh; margin: 0; }
+    video { width: 100%; max-width: 1280px; }
+  </style>
+</head>
+<body>
+  <video id="video" controls autoplay muted></video>
+  <script>
+    const video = document.getElementById('video');
+    const src = 'http://40.192.35.27:8888/live/cam1/index.m3u8';
+
+    if (Hls.isSupported()) {
+      const hls = new Hls({
+        lowLatencyMode: true,
+        liveSyncDurationCount: 3,
+        liveMaxLatencyDurationCount: 7,
+      });
+      hls.loadSource(src);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = src;
+      video.play();
+    }
+  </script>
+</body>
+</html>

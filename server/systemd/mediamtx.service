@@ -1,0 +1,19 @@
+[Unit]
+Description=MediaMTX RTMP/HLS Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+ExecStart=/usr/local/bin/mediamtx /etc/mediamtx/mediamtx.yml
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Ensure recordings dir exists on start
+ExecStartPre=/bin/mkdir -p /tmp/recordings
+
+[Install]
+WantedBy=multi-user.target
